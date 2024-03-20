@@ -15,20 +15,17 @@
 #include <string.h>
 
 // messages to print on OLED
-const char Message1[] PROGMEM = "TEMP:";
+const char Message1[] PROGMEM = "COUNT:";
 
 int main(void)
 {
   char buffer[3];
-  DDRB = 1<<DDB4;
-
   OLED_init(); // initialize the OLED
   int x = 0;
   OLED_clear();
   while (1)
-  { // loop until forever
-
-    OLED_cursor(20, 1);    // set cursor position
+  { 
+    OLED_cursor(10, 1);    // set cursor position
     OLED_printP(Message1); // print message 1
     OLED_cursor(50, 1);    // set cursor position
     x++;
@@ -38,12 +35,6 @@ int main(void)
     {
       OLED_printC(buffer[i]);
     }
-    OLED_cursor(20, 3);
-    OLED_printC(x / 100 + '0');     // hundreds Digit
-    OLED_printC(x / 10 % 10 + '0'); // tens digit
-    OLED_printC('.');
-    OLED_printC(x % 10 + '0'); // 10's digit
-    PORTB ^= 1<<PB4;
-    _delay_ms(50);
+    _delay_ms(100);
   }
 }
