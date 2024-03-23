@@ -13,7 +13,7 @@ SERIALPORT = usb
 
 #______________ MODIFY SOURCEFILE NAME(S)_________________________________
 # Specify the name of your source code here:
-SOURCEFILE =tinyOLEDtest.c tinyOLED.c
+SOURCEFILE =blink.c
 
 #______________ MODIFY CPU CLOCK, PROGRAMMER MODEL, AND MCU_______________
 CLOCKSPEED = 1000000UL	#Use 16000000 for Arduino Uno; 1000000 for new ATmega328P chip
@@ -29,8 +29,8 @@ main.hex: main.elf
 	avr-size --format=avr --mcu=$(MCU) main.elf
 
 main.elf: $(SOURCEFILE)
-	avr-gcc -Wall -Os -DF_CPU=$(CLOCKSPEED) -mmcu=$(MCU) -o main.elf $(SOURCEFILE)
+	avr-gcc -std=c99 -Wall -Os -DF_CPU=$(CLOCKSPEED) -mmcu=$(MCU) -o main.elf $(SOURCEFILE)
 	
 flash:	begin
-	avrdude -c $(PROGRAMMER) -b 115200 -P $(SERIALPORT) -p $(MCU) -U flash:w:main.hex:i
-
+	avrdude -c $(PROGRAMMER) -b 115200  -p $(MCU) -U flash:w:main.hex:i
+#avrdude -c $(PROGRAMMER) -b 115200 -P $(SERIALPORT) -p $(MCU) -U flash:w:main.hex:i

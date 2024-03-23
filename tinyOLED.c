@@ -111,7 +111,7 @@ void I2C_write(uint8_t data) {
   }
   I2C_SDA_HIGH();                         // release SDA for ACK bit of secondary
   I2C_SCL_HIGH();                         // 9th clock pulse is for the ACK bit
-  asm("nop");                             // ACK bit is ignored, just a delay
+  // asm("nop");         // ACK bit is ignored, just a delay COMMENTED OUT DM 3/20/24
   I2C_SCL_LOW();                          // clock LOW again
 }
 

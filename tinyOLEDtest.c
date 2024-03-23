@@ -35,6 +35,6 @@ int main(void)
     {
       OLED_printC(buffer[i]);
     }
-    _delay_ms(100);
+    _delay_ms(1000);
   }
 }
