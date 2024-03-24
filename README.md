@@ -1,7 +1,9 @@
 repository: tinyOLED 
+
 owner: David McLaughlin, UMass Amherst
+
 created: March 20, 2024
-updated March 23, 2024
+updated March 23, 2024 and various other dates
 
 This repository contains code for testing SSD1306 OLED using ATtiny85 microcontroller
 This code has been built for ECE-304 Spring semester 2024
