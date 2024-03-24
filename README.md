@@ -12,5 +12,5 @@ A simple program to display some characters and numbers on the OLED is contained
 
 blink.c is also added. Very simple code to blink an LED on ATtiny85 just to be sure things are working ok
 
-Acknowledgement: these files were extracted from open source code published on github by Stefan Wagner  which can be found here:
+Acknowledgement: files tinyOLED.h and tinyOLED.c were based on open source code published on github by Stefan Wagner  which can be found here:
 https://github.com/wagiminator/ATtiny13-TinyOLEDdemo/tree/main/software/TinyOLEDdemo_t10_text
