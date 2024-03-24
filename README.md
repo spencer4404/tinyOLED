@@ -8,7 +8,7 @@ This code has been built for ECE-304 Spring semester 2024
 
 The user-defined library for I2C and SSD1306 is contained in tinyOLED.c (source code) and tinyOLED.h (API).  
 
-A simple program to display some characters and numbers on the OLED is contained in tinyOLEDtest.c
+A simple program to display some characters and numbers on the OLED is contained in tinyOLEDtest.c. A photograph of the wiring is also contained in this repository.
 
 blink.c is also added. Very simple code to blink an LED on ATtiny85 just to be sure things are working ok
 
