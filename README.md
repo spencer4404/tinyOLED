@@ -6,7 +6,7 @@ created: March 20, 2024
 updated March 23, 2024 and various other dates
 
 This repository contains code for testing SSD1306 OLED using ATtiny85 microcontroller
-This code has been built for ECE-304 Spring semester 2024
+This code has been built for ECE-304 
 
 The user-defined library for I2C and SSD1306 is contained in tinyOLED.c (source code) and tinyOLED.h (API).  
 
