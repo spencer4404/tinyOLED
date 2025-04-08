@@ -6,7 +6,7 @@
 #include <string.h>
 
 // messages to print on OLED
-const char Label[] PROGMEM = "VOLTS:";
+const char Label[] PROGMEM = "TEMP:";
 
 // Initialize ADC
 void ADC_init(void)
@@ -42,15 +42,29 @@ int main(void)
     uint16_t adc = ADC_read();
     float voltage = (adc / 1023.0) * 3.3; // if Vcc is 3.3V
 
-    dtostrf(voltage, 4, 2, buffer); // convert float to string, 2 decimal places
+    float tempC = (voltage - 0.5) * 100.0;
+    float tempF = tempC * 9.0 / 5.0 + 32.0;
+
+    char tempF_str[6];
+    char tempC_str[6];
+    dtostrf(tempF, 4, 1, tempF_str);
+    dtostrf(tempC, 4, 1, tempC_str);
 
     OLED_cursor(0, 1);
-
     OLED_printP(Label);
 
     OLED_cursor(40, 1);
-    for (uint8_t i = 0; i < strlen(buffer); i++)
-      OLED_printC(buffer[i]);
+    for (uint8_t i = 0; i < strlen(tempF_str); i++)
+      OLED_printC(tempF_str[i]);
+    OLED_printC('F');
+
+    OLED_printC(' ');
+    OLED_printC('/');
+    OLED_printC(' ');
+
+    for (uint8_t i = 0; i < strlen(tempC_str); i++)
+      OLED_printC(tempC_str[i]);
+    OLED_printC('C');
 
     _delay_ms(500);
   }
