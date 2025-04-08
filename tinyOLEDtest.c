@@ -1,12 +1,3 @@
-/*********************************************
- * tinyOLEDtest.c
- * This code was written to test an SSD1306 0.96"
- * 64x128 OLED display controlled by ATtiny85 with
- * the tinyOLED library.
- * Prepared for ECE-304/JDP Spring 2024
- * D.McLaughlin 3/13/24
- * *******************************************/
-
 #include "tinyOLED.h"
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -15,31 +6,52 @@
 #include <string.h>
 
 // messages to print on OLED
-const char Message1[] PROGMEM = "COUNT:";
+const char Label[] PROGMEM = "VOLTS:";
+
+// Initialize ADC
+void ADC_init(void)
+{
+  ADMUX = (1 << MUX1) | (1 << MUX0);                  // use ADC3 (PB3 / pin 2)
+  ADCSRA = (1 << ADEN) | (1 << ADPS1) | (1 << ADPS0); // enable ADC, prescaler 8
+}
+
+// Read analog pin (PB3 / ADC3)
+uint16_t ADC_read(void)
+{
+  ADCSRA |= (1 << ADSC); // start conversion
+  while (ADCSRA & (1 << ADSC))
+    ; // wait until done
+  return ADC;
+}
 
 int main(void)
 {
-  char buffer[3];
+  char buffer[12];
   OLED_init(); // initialize the OLED
+  ADC_init();
+
   I2C_start(OLED_ADDR);
   I2C_write(OLED_CMD_MODE);
   I2C_write(0xA1); // segment remap
   I2C_write(0xC8); // COM scan direction
   I2C_stop();
-  int x = 0;
+
   OLED_clear();
   while (1)
   {
-    OLED_cursor(10, 1);    // set cursor position
-    OLED_printP(Message1); // print message 1
-    OLED_cursor(50, 1);    // set cursor position
-    x++;
-    itoa(x, buffer, 10); // Convert dig value to character string
-    unsigned char i;
-    for (i = 0; i < strlen(buffer); i++)
-    {
+    uint16_t adc = ADC_read();
+    float voltage = (adc / 1023.0) * 3.3; // if Vcc is 3.3V
+
+    dtostrf(voltage, 4, 2, buffer); // convert float to string, 2 decimal places
+
+    OLED_cursor(0, 1);
+
+    OLED_printP(Label);
+
+    OLED_cursor(40, 1);
+    for (uint8_t i = 0; i < strlen(buffer); i++)
       OLED_printC(buffer[i]);
-    }
-    _delay_ms(1000);
+
+    _delay_ms(500);
   }
 }
