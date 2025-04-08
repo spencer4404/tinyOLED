@@ -13,12 +13,12 @@ SERIALPORT = usb
 
 #______________ MODIFY SOURCEFILE NAME(S)_________________________________
 # Specify the name of your source code here:
-SOURCEFILE =megaTempSleep.c i2c.c ssd1306.c
+SOURCEFILE = tinyOLEDtest.c tinyOLED.c
 
 #______________ MODIFY CPU CLOCK, PROGRAMMER MODEL, AND MCU_______________
 CLOCKSPEED = 1000000UL	#Use 16000000 for Arduino Uno; 1000000 for new ATmega328P chip
 PROGRAMMER = usbtiny 	#Use arduino for Arduino Uno; usbtiny for pocket programmer 
-MCU = atmega328p 	#Use atmega328p, attiny85, or other MCU name as appropriate
+MCU = attiny85 	#Use atmega328p, attiny85, or other MCU name as appropriate
 
 #______________DON'T CHANGE ANYTHING BELOW UNLESS YOU KNOW WHAT YOU'RE DOING_________
 begin:	main.hex
@@ -34,3 +34,5 @@ main.elf: $(SOURCEFILE)
 flash:	begin
 	avrdude -c $(PROGRAMMER) -b 115200 -P $(SERIALPORT) -p $(MCU) -U flash:w:main.hex:i
 
+clean:
+	rm -f *.o *.elf *.hex

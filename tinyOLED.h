@@ -8,26 +8,24 @@
 // Changes made: separate single file into .c and .h files;
 // used Main/Secondary nomenclature; other small changes
 
-
 // libraries
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 
 // I2C definitions
-#define I2C_SDA         PB0                   // serial data pin
-#define I2C_SCL         PB2                   // serial clock pin
-#define I2C_SDA_HIGH()  DDRB &= ~(1<<I2C_SDA) // release SDA   -> pulled HIGH by resistor
-#define I2C_SDA_LOW()   DDRB |=  (1<<I2C_SDA) // SDA as output -> pulled LOW  by MCU
-#define I2C_SCL_HIGH()  DDRB &= ~(1<<I2C_SCL) // release SCL   -> pulled HIGH by resistor
-#define I2C_SCL_LOW()   DDRB |=  (1<<I2C_SCL) // SCL as output -> pulled LOW  by MCU
+#define I2C_SDA PB0                            // serial data pin
+#define I2C_SCL PB2                            // serial clock pin
+#define I2C_SDA_HIGH() DDRB &= ~(1 << I2C_SDA) // release SDA   -> pulled HIGH by resistor
+#define I2C_SDA_LOW() DDRB |= (1 << I2C_SDA)   // SDA as output -> pulled LOW  by MCU
+#define I2C_SCL_HIGH() DDRB &= ~(1 << I2C_SCL) // release SCL   -> pulled HIGH by resistor
+#define I2C_SCL_LOW() DDRB |= (1 << I2C_SCL)   // SCL as output -> pulled LOW  by MCU
 
 // OLED definitions
-#define OLED_ADDR       0x78                  // OLED write address
-#define OLED_CMD_MODE   0x00                  // set command mode
-#define OLED_DAT_MODE   0x40                  // set data mode
-#define OLED_INIT_LEN   12                    // 12: no screen flip, 14: screen flip
-
+#define OLED_ADDR 0x78     // OLED write address
+#define OLED_CMD_MODE 0x00 // set command mode
+#define OLED_DAT_MODE 0x40 // set data mode
+#define OLED_INIT_LEN 12   // 12: no screen flip, 14: screen flip
 
 // I2C init function
 void I2C_init(void);
@@ -36,25 +34,25 @@ void I2C_init(void);
 void I2C_write(uint8_t data);
 
 // I2C start transmission
-void I2C_start(uint8_t addr); 
+void I2C_start(uint8_t addr);
 
 // I2C stop transmission
-void I2C_stop(void); 
+void I2C_stop(void);
 
 // OLED init function
-void OLED_init(void); 
+void OLED_init(void);
 
 // OLED set vertical shift
 void OLED_shift(uint8_t ypos);
 
 // OLED print a character
-void OLED_printC(char ch); 
+void OLED_printC(char ch);
 
 // OLED print a string from program memory
-void OLED_printP(const char* p); 
+void OLED_printP(const char *p);
 
 // OLED set the cursor
-void OLED_cursor(uint8_t xpos, uint8_t ypos); 
+void OLED_cursor(uint8_t xpos, uint8_t ypos);
 
 // OLED clear screen
-void OLED_clear(void); 
+void OLED_clear(void);
