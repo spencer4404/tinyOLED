@@ -24,9 +24,23 @@ uint16_t ADC_read(void)
   return ADC;
 }
 
+// get rolling average temp
+float get_avg_temp(uint8_t num_samples)
+{
+  float total = 0.0;
+  for (uint8_t i = 0; i < num_samples; i++)
+  {
+    uint16_t adc = ADC_read();
+    float voltage = (adc / 1023.0) * 3.3; // 3.3 volts
+    float tempC = (voltage - 0.5) * 100.0;
+    total += tempC;
+    _delay_ms(10); // optional small delay between readings
+  }
+  return total / num_samples;
+}
+
 int main(void)
 {
-  char buffer[12];
   OLED_init(); // initialize the OLED
   ADC_init();
 
@@ -39,16 +53,14 @@ int main(void)
   OLED_clear();
   while (1)
   {
-    uint16_t adc = ADC_read();
-    float voltage = (adc / 1023.0) * 3.3; // if Vcc is 3.3V
 
-    float tempC = (voltage - 0.5) * 100.0;
-    float tempF = tempC * 9.0 / 5.0 + 32.0;
+    float avgC = get_avg_temp(25);
+    float avgF = avgC * 9.0 / 5.0 + 32.0;
 
     char tempF_str[6];
     char tempC_str[6];
-    dtostrf(tempF, 4, 1, tempF_str);
-    dtostrf(tempC, 4, 1, tempC_str);
+    dtostrf(avgF, 4, 1, tempF_str);
+    dtostrf(avgC, 4, 1, tempC_str);
 
     OLED_cursor(0, 1);
     OLED_printP(Label);
