@@ -4,9 +4,29 @@
 #include <util/delay.h>
 #include <stdlib.h>
 #include <string.h>
+#include <avr/sleep.h>
+#include <avr/wdt.h>
+#include <avr/interrupt.h>
 
 // messages to print on OLED
 const char Label[] PROGMEM = "TEMP:";
+
+void setup_watchdog()
+{
+  cli();
+  wdt_reset();
+
+  // Set watchdog to interrupt mode only, ~8s max delay
+  WDTCR = (1 << WDCE) | (1 << WDE);  // Enable configuration mode
+  WDTCR = (1 << WDIE) | (1 << WDP3); // Enable interrupt, set ~8s timeout
+  sei();
+}
+
+// Watchdog interrupt handler
+ISR(WDT_vect)
+{
+  // Just wakes from sleep — nothing else needed
+}
 
 // Initialize ADC
 void ADC_init(void)
@@ -39,6 +59,12 @@ float get_avg_temp(uint8_t num_samples)
   return total / num_samples;
 }
 
+// check for too hot
+uint8_t is_too_hot(float tempC, float limitC)
+{
+  return tempC > limitC;
+}
+
 int main(void)
 {
   OLED_init(); // initialize the OLED
@@ -62,10 +88,10 @@ int main(void)
     dtostrf(avgF, 4, 1, tempF_str);
     dtostrf(avgC, 4, 1, tempC_str);
 
-    OLED_cursor(0, 1);
+    OLED_cursor(0, 0);
     OLED_printP(Label);
 
-    OLED_cursor(40, 1);
+    OLED_cursor(40, 0);
     for (uint8_t i = 0; i < strlen(tempF_str); i++)
       OLED_printC(tempF_str[i]);
     OLED_printC('F');
@@ -78,6 +104,17 @@ int main(void)
       OLED_printC(tempC_str[i]);
     OLED_printC('C');
 
-    _delay_ms(500);
+    if (is_too_hot(avgC, 26.0))
+    {
+      OLED_cursor(0, 2);
+      OLED_printP(PSTR("TOO HOT"));
+    }
+    else
+    {
+      OLED_cursor(0, 2);
+      OLED_printP(PSTR("       "));
+    }
+
+    _delay_ms(2000);
   }
 }
