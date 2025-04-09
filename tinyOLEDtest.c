@@ -11,23 +11,6 @@
 // messages to print on OLED
 const char Label[] PROGMEM = "TEMP:";
 
-void setup_watchdog()
-{
-  cli();
-  wdt_reset();
-
-  // Set watchdog to interrupt mode only, ~8s max delay
-  WDTCR = (1 << WDCE) | (1 << WDE);  // Enable configuration mode
-  WDTCR = (1 << WDIE) | (1 << WDP3); // Enable interrupt, set ~8s timeout
-  sei();
-}
-
-// Watchdog interrupt handler
-ISR(WDT_vect)
-{
-  // Just wakes from sleep — nothing else needed
-}
-
 // Initialize ADC
 void ADC_init(void)
 {
