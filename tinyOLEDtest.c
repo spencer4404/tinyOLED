@@ -48,6 +48,34 @@ uint8_t is_too_hot(float tempC, float limitC)
   return tempC > limitC;
 }
 
+void setup_watchdog()
+{
+  cli();
+  wdt_reset();
+
+  // Set watchdog to interrupt mode only, ~8s max delay
+  WDTCR = (1 << WDCE) | (1 << WDE);  // Enable configuration mode
+  WDTCR = (1 << WDIE) | (1 << WDP3); // Enable interrupt, set ~8s timeout
+  sei();
+}
+
+// Watchdog interrupt handler
+ISR(WDT_vect)
+{
+  // Just wakes from sleep — nothing else needed
+}
+
+void enter_sleep(void)
+{
+  set_sleep_mode(SLEEP_MODE_PWR_DOWN); // Deepest sleep mode
+  sleep_enable();
+  sleep_bod_disable(); // Disable brown-out detector for lower power
+  sleep_cpu();         // Actually go to sleep
+
+  // Program resumes here after waking up
+  sleep_disable(); // Always good practice
+}
+
 int main(void)
 {
   OLED_init(); // initialize the OLED
@@ -60,6 +88,7 @@ int main(void)
   I2C_stop();
 
   OLED_clear();
+  setup_watchdog();
   while (1)
   {
 
@@ -98,6 +127,6 @@ int main(void)
       OLED_printP(PSTR("       "));
     }
 
-    _delay_ms(2000);
+    enter_sleep();
   }
 }
