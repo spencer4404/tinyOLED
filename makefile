@@ -13,7 +13,7 @@ SERIALPORT = usb
 
 #______________ MODIFY SOURCEFILE NAME(S)_________________________________
 # Specify the name of your source code here:
-SOURCEFILE = tinyOLEDtest.c tinyOLED.c
+SOURCEFILE = tinyTemp.c tinyOLED.c
 
 #______________ MODIFY CPU CLOCK, PROGRAMMER MODEL, AND MCU_______________
 CLOCKSPEED = 1000000UL	#Use 16000000 for Arduino Uno; 1000000 for new ATmega328P chip
