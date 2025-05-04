@@ -116,7 +116,7 @@ int main(void)
       OLED_printC(tempC_str[i]);
     OLED_printC('C');
 
-    if (is_too_hot(avgC, 26.0))
+    if (is_too_hot(avgC, 26.67))
     {
       OLED_cursor(0, 2);
       OLED_printP(PSTR("TOO HOT"));
